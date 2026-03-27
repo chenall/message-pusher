@@ -135,10 +135,15 @@ func SendWeChatCorpMessage(message *model.Message, user *model.User, channel_ *m
 		}
 	} else {
 		if clientType == "plugin" {
-			messageRequest.MessageType = "textcard"
-			messageRequest.TextCard.Title = message.Title
-			messageRequest.TextCard.Description = message.Description
-			messageRequest.TextCard.URL = message.URL
+			if message.Title == "" || message.Description == "" {
+				messageRequest.MessageType = "text"
+				messageRequest.Text.Content = message.Content
+			} else {
+				messageRequest.MessageType = "textcard"
+				messageRequest.TextCard.Title = message.Title
+				messageRequest.TextCard.Description = message.Description
+				messageRequest.TextCard.URL = message.URL
+			}
 		} else {
 			messageRequest.MessageType = "markdown"
 			messageRequest.Markdown.Content = message.Content
